@@ -1,11 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+
+    @extends("layout")
+
+    @section("tittle")
+    Home
+    @endsection
+    
+    @section("content")
+    <div class="container mt-5  d-flex flex-column text-center">
     <h1>Welcome to my page</h1>
-</body>
-</html>
+    <p>Current time: {{ date("h:i:s") }}</p>
+    </div>
+    @endsection
+    

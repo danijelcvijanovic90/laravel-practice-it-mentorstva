@@ -1,17 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <form action="" class="container d-flex flex-column mt-5">
-        <input type="text" name="name" placeholder="Please enter your name">
-        <input type="text" name="email" placeholder="Please enter you email">
-        <input type="text" name="message" placeholder="Please enter your message">
+   
+
+    @extends("layout")
+
+    @section("tittle")
+    Contact
+    @endsection
+    
+    @section("content")
+    <form class="container col-md-4 d-flex flex-column mt-5 py-3 gap-3">
+        <input type="text" name="name" class="form-control border border-dark" placeholder="Please enter your name">
+        <input type="email" name="email" class="form-control border border-dark" placeholder="Please enter you email">
+        <input type="text" name="subject" class="form-control border border-dark" placeholder="Please enter subject">
+        <textarea name="message" class="form-control border border-dark" rows="5" placeholder="Please enter your message"></textarea>
         <button type="button" class="btn btn-primary w-25 btn-sm mt-5 mx-auto">Send</button>
     </form>
-</body>
-</html>
+
+    <iframe class="container col-md-4 mt-5 d-flex justify-content-center" src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d2827.967384057362!2d17.665314712560164!3d44.86295877323152!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNDTCsDUxJzQ2LjYiTiAxN8KwNDAnMDQuNCJF!5e0!3m2!1sen!2sba!4v1769422300987!5m2!1sen!2sba" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    @endsection
+
+    
+    
+
