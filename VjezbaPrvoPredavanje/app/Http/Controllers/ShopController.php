@@ -39,9 +39,4 @@ class ShopController extends Controller
         return redirect("/admin/add-product");
     }
 
-    public function products()
-    {
-        $products = ProductModel::all();
-        return view("/products", compact('products'));
-    }
 }
