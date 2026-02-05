@@ -31,8 +31,11 @@ Contact messages
         <td>{{ $contact->subject }}</td>
         <td>{{ $contact->message }}</td>
         <td>{{ $contact->created_at }}</td>
-        <td class="text-end">
-            <a class="btn btn-danger" href="{{ route('delete_contact', $contact->id) }}">Delete</a>
+        <td class="text-center">
+            <div class="d-flex justify-content-center gap-2">
+                <a class="btn btn-danger" href="{{ route('delete_contact', $contact->id) }}">Delete</a>
+                <a class="btn btn-primary" href="{{ route('edit_contact' , $contact->id) }}">Edit</a>
+            </div>    
         </td>
         </tr>
     </tbody>

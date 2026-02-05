@@ -51,4 +51,31 @@ class ContactController extends Controller
 
         return redirect()->back();
     }
+
+    public function edit_contact($contact_id)
+    {
+        $single_contact=ContactModel::where(['id'=>$contact_id])->first();
+        return view('edit_contact', compact('single_contact'));
+    }
+
+    public function update_contact(Request $request, $contact_id)
+    {
+        $single_contact=ContactModel::where(['id'=>$contact_id])->first();
+
+        if($single_contact===null)
+            {
+                die('Contact id does not exists');
+            }
+
+        $validated=$request->validate([
+            "name" => 'required|string',
+            "email" => 'required|string',
+            "subject" => 'required|string',
+            "message" => 'required|string|min:5'
+        ]);
+
+        $single_contact->update($validated);
+
+        return redirect(route('all_contacts'));
+    }
 }

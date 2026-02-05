@@ -21,7 +21,7 @@ class ShopController extends Controller
     public function add_new_product(Request $request)
     {
         $request->validate([
-            "name" => "string|required",
+            "name" => "string|required|unique:products",
             "description" => "string|required|min:5|max:255",
             "amount" => "int|min:1|required",
             "price" => "numeric|gt:0|required",
@@ -36,7 +36,7 @@ class ShopController extends Controller
             "image" => $request->get("image")
         ]);
 
-        return redirect("/admin/add-product");
+        return redirect("/admin/all-products");
     }
 
 }
