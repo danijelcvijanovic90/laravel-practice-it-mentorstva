@@ -15,31 +15,22 @@ class ProductsController extends Controller
 
     }
 
-    public function single_product($product)
+    public function single_product(ProductModel $product)
     {
-        $product= ProductModel::where(['id' => $product])->first();
         return view("/edit_product", compact('product'));
     }
 
-    public function update_product(Request $request,$product_id)
-    {
-        $single_product=ProductModel::where(["id"=>$product_id])->first();
-
-        if($single_product === null)
-            {
-                die ("Product does not exist");
-            }
-
-
+    public function update_product(Request $request,ProductModel $product)
+    {        
         $validated=$request->validate([
-            "name" => "string|required|unique:products,name," .$product_id, //ignore unique for this id
+            "name" => "string|required|unique:products,name," . $product->id, //ignore unique for this id
             "description" => "string|required|min:5|max:255",
             "amount" => "int|min:1|required",
             "price" => "numeric|gt:0|required",
             "image" => "string|required"
         ]);
 
-        $single_product->update($validated);
+        $product->update($validated);
 
     
         return redirect()->route('all_products');
