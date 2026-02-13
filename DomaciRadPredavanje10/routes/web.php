@@ -8,6 +8,7 @@ require __DIR__.'/auth.php';
 
 
 Route::get('/',[WeatherController::class, 'index'])->middleware('auth')->name('homepage');
+Route::get('/forecast/{city}',[WeatherController::class, 'forecast'])->name('forecast');
 
 Route::middleware(['auth',\App\Http\Middleware\RoleCheckMiddleware::class])->prefix('admin')->group(function ()
 {

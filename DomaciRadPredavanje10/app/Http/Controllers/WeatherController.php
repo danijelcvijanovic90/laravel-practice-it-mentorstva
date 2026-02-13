@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cities;
 use App\Models\Weather;
 use Illuminate\Http\Request;
 
@@ -9,7 +10,7 @@ class WeatherController extends Controller
 {
     public function index()
     {
-        $cities=Weather::all();
+        $cities= Cities::with('weather')->get();
         return view('/welcome', compact('cities'));
     }
 
@@ -55,6 +56,12 @@ class WeatherController extends Controller
     {
         $city->delete();
         return redirect()->back();
+    }
+
+    public function forecast(Cities $city)
+    {
+        $city->load('forecast'); //load forecast for city id.
+        return view('forecast', compact('city'));
     }
 
 }

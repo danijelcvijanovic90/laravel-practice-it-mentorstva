@@ -15,7 +15,18 @@ class UserWeatherSeeder extends Seeder
     public function run(): void
     {
         $city_name=$this->command->getOutput()->ask("Please enter city name:" );
+        if($city_name === null)
+        {
+            $this->command->getOutput()->error("City name field can not be empty");
+            return;
+        }
+
         $temperature=$this->command->getOutput()->ask("Please enter temperature:");
+        if($temperature === null)
+        {
+            $this->command->getOutput()->error("Temperature field can not be empty");
+            return;
+        }
 
         if(Weather::where('city', $city_name)->exitst())
         {

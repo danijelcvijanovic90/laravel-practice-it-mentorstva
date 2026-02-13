@@ -42,12 +42,31 @@ class UserSeeder extends Seeder
            //his->command->getOutput()->progressFinish();
 
         $name=$this->command->getOutput()->ask("Please enter user name:");
+        if($name === null)
+        {
+            $this->command->getOutput()->error("User name can not be empty");
+            return;
+        }
+
         $email=$this->command->getOutput()->ask("Please enter user email:");
+        if($email === null)
+        {
+            $this->command->getOutput()->error("Email can not be empty");
+            return;
+        }
+
+
         $password=$this->command->getOutput()->ask("Please enter user password:");
+        if($password === null)
+        {
+            $this->command->getOutput()->error("Password field can not be emppty");
+            return;
+        }
 
         if(User::where('email', $email)->exists())
         {
             $this->command->getOutput()->error("User with $email already exists!");
+            return; // if user exists, stop with code,
         }
 
         User::create([
