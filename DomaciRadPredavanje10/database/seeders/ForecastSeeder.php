@@ -25,14 +25,27 @@ class ForecastSeeder extends Seeder
 
         $cities=Cities::all();
 
+
+
         foreach($cities as $city)
         {
+
+            $weather_type= Forecast::WEATHER[rand(0,2)];
+            $probability=null;
+
+            if($weather_type == 'rainy' || $weather_type == 'snowy')
+            {
+                $probability = rand(1, 100);
+            }
+
+
             for($i=0; $i<$amount;$i++)
             Forecast::create([
                 "city_id" => $city->id, //for every city->id create $amount of values (temperature and date)
-                "temperature" => $faker->numberBetween(0,25), //value between 0-25
+                "temperature" => $faker->numberBetween(15,30), //value between 0-25
                 "date" => now()->addDays($i), //start from now and add $i days.
-
+                "weather_type" => $weather_type,
+                "probability" => $probability,
             ]);
         }
 

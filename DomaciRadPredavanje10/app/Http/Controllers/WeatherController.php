@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cities;
+use App\Models\Forecast;
 use App\Models\Weather;
 use Illuminate\Http\Request;
 
@@ -62,6 +63,39 @@ class WeatherController extends Controller
     {
         $city->load('forecast'); //load forecast for city id.
         return view('forecast', compact('city'));
+    }
+
+    public function edit_temperature()
+    {
+        $cities=Cities::all();
+        return view('weather', compact('cities'));
+    }
+
+    public function update_temperature(Request $request)
+    {
+
+
+        $request->validate([
+            'temperature' => 'required',
+            'city_id' => 'required|exists:cities,id',
+            'date'  => 'required',
+            'weather_type' => 'required',
+            'probability' => 'nullable',
+        ]);
+
+
+        Forecast::create([
+            'city_id' => $request->get('city_id'),
+            'temperature' => $request->get('temperature'),
+            'date' => $request->get('date'),
+            'weather_type' => strtolower($request->get('weather_type')),
+            'probability' => $request->get('weather_type') === 'sunny'
+                            ? null
+                            :$request->get('probability'),
+
+        ]);
+
+        return redirect()->back();
     }
 
 }

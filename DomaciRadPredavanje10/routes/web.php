@@ -18,6 +18,8 @@ Route::middleware(['auth',\App\Http\Middleware\RoleCheckMiddleware::class])->pre
     Route::get('/edit-city/{city}', [WeatherController::class,'edit_city'])->name('edit-city');
     Route::post('/edit-current-city/{city}', [WeatherController::class,'edit_current_city'])->name('edit-current-city');
     Route::get('/delete-city/{city}', [WeatherController::class, 'delete_city'])->name('delete_city');
+    Route::get('/weather', [WeatherController::class, 'edit_temperature'])->name('edit_temperature');
+    Route::post('/update_temperature', [WeatherController::class, 'update_temperature'])->name('update-temperature');
 
 
 });
