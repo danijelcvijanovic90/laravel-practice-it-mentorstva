@@ -68,7 +68,8 @@ class WeatherController extends Controller
     public function edit_temperature()
     {
         $cities=Cities::all();
-        return view('weather', compact('cities'));
+        $weather=Forecast::WEATHER;
+        return view('weather', compact('cities','weather'));
     }
 
     public function update_temperature(Request $request)

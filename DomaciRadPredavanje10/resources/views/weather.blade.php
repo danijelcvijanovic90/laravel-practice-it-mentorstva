@@ -61,9 +61,11 @@
                                 <option value="" disabled selected>
                                     Weather Type...
                                 </option>
-                                <option value="sunny">Sunny</option>
-                                <option value="rainy">Rainy</option>
-                                <option value="snowy">Snowy</option>
+                                @foreach($weather as $weather_type)
+                                    <option value="{{$weather_type}}">{{ucfirst($weather_type)}}</option>
+                                @endforeach
+
+
                             </select>
                         </div>
 
