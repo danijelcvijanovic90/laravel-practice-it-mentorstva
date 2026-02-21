@@ -1,10 +1,10 @@
-@extends("layout")
+@extends("admin.layout")
 
 @section('tittle')
     Weather
 @endsection
 
-@section('content')
+@section("content")
     @if($errors->any())
 
         <p class="alert alert-danger text-center">Error: {{ $errors->first() }}</p>
@@ -19,7 +19,7 @@
             </div>
 
             <div class="card-body">
-                <form action="{{ route('update-temperature') }}" method="POST">
+                <form action="{{ route('create-temperature') }}" method="POST">
                     {{ csrf_field() }}
 
                     <div class="row g-4">
@@ -62,7 +62,7 @@
                                     Weather Type...
                                 </option>
                                 @foreach($weather as $weather_type)
-                                    <option value="{{$weather_type}}">{{ucfirst($weather_type)}}</option>
+                                    <option value="{{$weather_type}}" style="">{{ucfirst($weather_type)}}</option>
                                 @endforeach
 
 
@@ -117,12 +117,16 @@
 
                         <ul class="list-group list-group-flush">
 
-                            @foreach($city->forecast->sortByDesc('created_at')->take(5) as $forecast)
+                            @foreach($city->forecast as $forecast)
+                                @php
+                                    $color = \App\Http\forecast_helper::get_color_by_temperature($forecast->temperature);
+                                    $icon = \App\Http\forecast_helper::get_icon_by_weather_type($forecast->weather_type);
+                                @endphp
                                 <li class="list-group-item">
                                     <div class="row text-center">
                                         <div class="col-3">{{ $forecast->date }}</div>
-                                        <div class="col-3">{{ $forecast->temperature }} °C</div>
-                                        <div class="col-3">{{ $forecast->weather_type }}</div>
+                                        <div class="col-3" style="color:{{$color}}">{{ $forecast->temperature }} °C</div>
+                                        <div class="col-3"> <i class="{{ $icon }}"></i> {{ $forecast->weather_type }}</div>
                                         <div class="col-3">{{ $forecast->probability ?? '-' }}%</div>
                                     </div>
                                 </li>

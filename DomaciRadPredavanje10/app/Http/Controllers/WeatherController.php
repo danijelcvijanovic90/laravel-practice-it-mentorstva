@@ -38,7 +38,7 @@ class WeatherController extends Controller
 
     public function edit_city(Weather $city)
     {
-        return view('edit_city', compact('city'));
+        return view('admin.edit_city', compact('city'));
     }
 
     public function edit_current_city(Request $request, Weather $city)
@@ -62,17 +62,17 @@ class WeatherController extends Controller
     public function forecast(Cities $city)
     {
         $city->load('forecast'); //load forecast for city id.
-        return view('forecast', compact('city'));
+        return view('admin.forecast', compact('city'));
     }
 
     public function edit_temperature()
     {
         $cities=Cities::all();
         $weather=Forecast::WEATHER;
-        return view('weather', compact('cities','weather'));
+        return view('admin.weather', compact('cities','weather'));
     }
 
-    public function update_temperature(Request $request)
+    public function create_temperature(Request $request)
     {
 
 
