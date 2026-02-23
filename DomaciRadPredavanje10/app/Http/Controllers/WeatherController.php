@@ -6,6 +6,7 @@ use App\Models\Cities;
 use App\Models\Forecast;
 use App\Models\Weather;
 use Illuminate\Http\Request;
+use function Brotli\compress_add;
 
 class WeatherController extends Controller
 {
@@ -97,6 +98,23 @@ class WeatherController extends Controller
         ]);
 
         return redirect()->back();
+    }
+
+    public function search(Request $request)
+    {
+        $city_name = $request->get('city');
+
+        $cities=Cities::with('todaysWeather')->where('name', 'LIKE', "%$city_name%")->get(); //if I want to optimise this
+        // I need to load todaysForecast for all cities
+
+
+
+        if(count($cities) == 0)
+        {
+            return redirect()->back()->with("error", "Nothing to show");
+        }
+
+        return view('search_results', compact('cities',));
     }
 
 }

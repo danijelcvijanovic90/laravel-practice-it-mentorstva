@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Cities extends Model
 {
@@ -19,5 +20,10 @@ class Cities extends Model
     {
         return $this->hasMany(Forecast::class,'city_id')
             ->orderBy('date')->take(5); // has many records for every city=>id
+    }
+
+    public function todaysWeather()
+    {
+        return $this->hasOne(Forecast::class, 'city_id')->whereDate('date',Carbon::now());
     }
 }

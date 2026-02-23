@@ -16,4 +16,5 @@ class Forecast extends Model
     {
         return $this->belongsTo(Cities::class, 'city_id'); //belongsTo Cities table with foreign key city_id -> city=>id
     }
+
 }

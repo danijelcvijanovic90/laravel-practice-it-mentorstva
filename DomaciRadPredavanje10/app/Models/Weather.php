@@ -15,4 +15,6 @@ class Weather extends Model
     }
 
 
+
+
 }
