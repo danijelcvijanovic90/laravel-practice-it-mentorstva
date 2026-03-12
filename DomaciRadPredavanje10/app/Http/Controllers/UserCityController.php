@@ -29,6 +29,12 @@ class UserCityController extends Controller
 
     public function destroy(Request $request)
     {
+
+        if(!Auth::check())
+        {
+            return redirect()->route('login')->with('error', 'You must be logged in to delete a favourite');
+        }
+
         $city_id= $request->get('city_id');
         UserCities::where('city_id', $city_id)->where('user_id', auth()->id())->delete();
         return redirect()->back()->with('success', 'City successfully deleted from favourites');
