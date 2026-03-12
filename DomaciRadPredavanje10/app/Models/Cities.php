@@ -26,4 +26,9 @@ class Cities extends Model
     {
         return $this->hasOne(Forecast::class, 'city_id')->whereDate('date',Carbon::now());
     }
+
+    public function userCities()
+    {
+        return $this->hasMany(UserCities::class, 'city_id');
+    }
 }

@@ -11,6 +11,19 @@
                 <a class="nav-link" href="/contact">Contact Us</a>
                 <a class="nav-link" href="/search">Search</a>
                 <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                @auth
+                    <form action="{{ route('logout') }}" METHOD="POST">
+                        {{ csrf_field() }}
+                        <button type="submit" class="nav-link">Logout</button>
+                    </form>
+
+                @else
+                    <a href="{{ route('login') }}" class="nav-link">Login</a>
+                    <a href="{{ route('register') }}" class="nav-link">Register</a>
+                @endauth
+
+
+
             </div>
         </div>
     </div>

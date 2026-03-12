@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Cities;
 use App\Models\Forecast;
+use App\Models\UserCities;
 use App\Models\Weather;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use function Brotli\compress_add;
 
 class WeatherController extends Controller
@@ -13,7 +15,20 @@ class WeatherController extends Controller
     public function index()
     {
         $cities= Cities::with('weather')->get();
-        return view('/welcome', compact('cities'));
+
+        if(!Auth::user())
+        {
+
+            $userFavourites=[];
+            return view('/welcome', compact('cities', 'userFavourites'));
+
+        }
+
+        $userFavourites=Auth::user()->userFavourites;
+        $userFavourites = $userFavourites->pluck('city_id')->toArray();
+
+        return view('/welcome', compact('cities', 'userFavourites'));
+
     }
 
     public function all_cities()
@@ -114,7 +129,19 @@ class WeatherController extends Controller
             return redirect()->back()->with("error", "Nothing to show");
         }
 
-        return view('search_results', compact('cities',));
+        if(!Auth::check())
+        {
+            $userFavourites=[];
+            return view('search_results', compact('cities','userFavourites'));
+        }
+
+        $userFavourites=Auth::user()->userFavourites;
+        $userFavourites = $userFavourites->pluck('city_id')->toArray();
+
+
+        return view('search_results', compact('cities','userFavourites'));
+
+
     }
 
 }
