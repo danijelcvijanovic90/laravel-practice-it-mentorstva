@@ -37,7 +37,17 @@ class forecast_helper
 
     public static function get_icon_by_weather_type($weather_type)
     {
-        $icon = self::WEATHER_ICONS[$weather_type];
-        return $icon;
+        if(array_key_exists($weather_type, self::WEATHER_ICONS))
+        {
+            $icon = self::WEATHER_ICONS[$weather_type];
+            return $icon;
+        }
+        else
+        {
+            $icon="fa-solid fa-smog";
+            return $icon;
+        }
+
+
     }
 }

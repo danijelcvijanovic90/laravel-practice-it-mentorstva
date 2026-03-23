@@ -8,6 +8,7 @@ use App\Models\UserCities;
 use App\Models\Weather;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use function Brotli\compress_add;
 
 class WeatherController extends Controller
@@ -119,14 +120,63 @@ class WeatherController extends Controller
     {
         $city_name = $request->get('city');
 
-        $cities=Cities::with('todaysWeather')->where('name', 'LIKE', "%$city_name%")->get(); //if I want to optimise this
+        $cities=Cities::with('todaysWeather')->where('name', 'LIKE', "%$city_name%")->get(); //if I want to optimize this
         // I need to load todaysForecast for all cities
 
 
 
         if(count($cities) == 0)
         {
-            return redirect()->back()->with("error", "Nothing to show");
+            $response = Http::get(env("WEATHER_API_URL")."/forecast.json",
+                [
+                    'key' => env("WEATHER_API_KEY"),
+                    'q' => $city_name,
+                    'aqi' => 'no',
+                    'days' => 10,
+                ]
+            );
+
+
+
+            if($response->successful())
+            {
+                $data=$response->json();
+
+                $city=Cities::create(
+                    [
+                        'name' => $city_name,
+                    ]
+                );
+
+                Weather::create([
+                    'city_id' => $city->id,
+                    'temperature' => $data['current']['temp_c'],
+                ]);
+
+                foreach($data['forecast']['forecastday'] as $forecast)
+                {
+                    Forecast::create(
+                        [
+                            'city_id' => $city->id,
+                            'temperature' => $forecast['day']['maxtemp_c'],
+                            'date' => $forecast['date'],
+                            'weather_type' =>$forecast['day']['condition']['text'],
+                            'probability' => $forecast['day']['daily_chance_of_rain'],
+                        ]
+                    );
+                }
+
+                $cities = Cities::with('todaysWeather')
+                    ->where('name', 'LIKE', "%$city_name%")
+                    ->get();
+
+            }
+
+
+            else
+            {
+                return redirect()->back()->with('error', 'City does not exists!');
+            }
         }
 
         if(!Auth::check())
