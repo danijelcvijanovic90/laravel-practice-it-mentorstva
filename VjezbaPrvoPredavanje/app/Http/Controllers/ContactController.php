@@ -2,12 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SendContactRequest;
+use App\Http\Requests\UpdateContactRequest;
+use App\Http\Requests\UpdateProductRequest;
+use App\Repositories\ContactRepository;
 use Illuminate\Http\Request;
 use App\Models\ContactModel;
 
 
 class ContactController extends Controller
 {
+
+    private $contactRepository;
+
+    public function __construct()
+    {
+        $this->contactRepository = new ContactRepository();
+    }
+
     public function index()
     {
         return view("/contact");
@@ -19,34 +31,21 @@ class ContactController extends Controller
         return view("all_contacts", compact('contacts'));
     }
 
-    public function send_contact(Request $request)
+    public function send_contact(SendContactRequest $request)
     {
-        $request->validate([
-            "name" => 'required|string',
-            "email" => 'required|string', //if(isset($_POST['email])) && is_string($_POST['email])
-            "subject" => 'required|string',
-            "message" => 'required|string|min:5'
-        ]);
-
-        ContactModel::create([
-            "email" => $request->get("email"),
-            "name" => $request->get("name"),
-            "subject" => $request->get("subject"),
-            "message" => $request->get("message")
-        ]);
-
+        $this->contactRepository->sendContact($request);
         return redirect("/shop");
     }
 
     public function delete($contact)
     {
-        $single_contact=ContactModel::where(['id' => $contact])->first();
+        $single_contact=$this->contactRepository->getContactById($contact);
 
         if($single_contact === null)
             {
                 die("Contact does not exists");
             }
-        
+
         $single_contact->delete();
 
         return redirect()->back();
@@ -54,27 +53,20 @@ class ContactController extends Controller
 
     public function edit_contact($contact_id)
     {
-        $single_contact=ContactModel::where(['id'=>$contact_id])->first();
+        $single_contact=$this->contactRepository->getContactById($contact_id);
         return view('edit_contact', compact('single_contact'));
     }
 
-    public function update_contact(Request $request, $contact_id)
+    public function update_contact(UpdateContactRequest $request, $contact_id)
     {
-        $single_contact=ContactModel::where(['id'=>$contact_id])->first();
+        $single_contact=$this->contactRepository->getContactById($contact_id);
 
         if($single_contact===null)
             {
-                die('Contact id does not exists');
+                return redirect()->back()->with('error', 'Not valid ID');
             }
 
-        $validated=$request->validate([
-            "name" => 'required|string',
-            "email" => 'required|string',
-            "subject" => 'required|string',
-            "message" => 'required|string|min:5'
-        ]);
-
-        $single_contact->update($validated);
+        $single_contact->update($request->validated());
 
         return redirect(route('all_contacts'));
     }

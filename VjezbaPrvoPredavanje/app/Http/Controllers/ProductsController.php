@@ -2,11 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SaveProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\ProductModel;
+use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
+
+    private $productRepository;
+
+    public function __construct()
+    {
+        $this->productRepository = new ProductRepository();
+    }
+
     public function index()
     {
         $products=ProductModel::all();
@@ -20,29 +31,20 @@ class ProductsController extends Controller
         return view("/edit_product", compact('product'));
     }
 
-    public function update_product(Request $request,ProductModel $product)
-    {        
-        $validated=$request->validate([
-            "name" => "string|required|unique:products,name," . $product->id, //ignore unique for this id
-            "description" => "string|required|min:5|max:255",
-            "amount" => "int|min:1|required",
-            "price" => "numeric|gt:0|required",
-            "image" => "string|required"
-        ]);
-
-        $product->update($validated);
-
-    
+    public function update_product(UpdateProductRequest $request, ProductModel $product)
+    {
+        $product->update($request->validated());
         return redirect()->route('all_products');
     }
 
     public function delete($product)
     {
-        $single_product= ProductModel::where(['id' => $product])->first(); // SELECT * FROM products WHERE id=:product LIMIT 1
+        //$single_product= ProductModel::where(['id' => $product])->first(); // SELECT * FROM products WHERE id=:product LIMIT 1
 
+        $single_product = $this->productRepository->getProductById($product);
         if($single_product === null)
             {
-                die ("Product does not exists"); //testing purposes, later fix errors in proper way.
+                return redirect()->back()->with('error', 'Not valid ID'); //testing purposes, later fix errors in proper way.
             }
 
         $single_product->delete();

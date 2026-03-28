@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
+use App\Models\ExchangeRates;
 
 class ExchangeRate extends Command
 {
@@ -26,19 +28,28 @@ class ExchangeRate extends Command
     public function handle()
     {
         $response = \Illuminate\Support\Facades\Http::get(
-            "https://v6.exchangerate-api.com/v6/" . env("EXCHANGE_RATE_API_KEY") . "/latest/USD"
+            "https://v6.exchangerate-api.com/v6/" . env("EXCHANGE_RATE_API_KEY") . "/latest/BAM"
         );
 
-        if ($response->successful()) {
+        if ($response->successful())
+        {
             $data = $response->json();
 
-            $eur = $data['conversion_rates']['EUR'];
-            $bam = $data['conversion_rates']['BAM'];
 
-            $this->info("EUR: " . $eur);
-            $this->info("BAM: " . $bam);
-        } else {
-            $this->error("API request failed!");
-        }
+                foreach(ExchangeRates::AVAILABLE_CURRENCIES as $currency)
+                {
+                    $todayCurrency=ExchangeRates::getCurrencyForToday($currency);
+                    if($todayCurrency != null)
+                    {
+                        continue;
+                    }
+
+                    ExchangeRates::create([
+                        'currency' => $currency,
+                        'value' => $data['conversion_rates'][$currency],
+                    ]);
+                }
+            }
+
     }
 }
