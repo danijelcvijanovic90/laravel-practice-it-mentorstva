@@ -12,7 +12,7 @@ Contact messages
 <div class="container">
 
 <table class="table table-striped table-hover align-middle">
-    
+
     <thead>
         <tr>
         <th>Sender name</th>
@@ -22,7 +22,7 @@ Contact messages
         <th>Date</th>
         </tr>
     </thead>
-        
+
     @foreach($contacts as $contact)
     <tbody>
         <tr>
@@ -33,9 +33,9 @@ Contact messages
         <td>{{ $contact->created_at }}</td>
         <td class="text-center">
             <div class="d-flex justify-content-center gap-2">
-                <a class="btn btn-danger" href="{{ route('delete_contact', $contact->id) }}">Delete</a>
-                <a class="btn btn-primary" href="{{ route('edit_contact' , $contact->id) }}">Edit</a>
-            </div>    
+                <a class="btn btn-danger" href="{{ route('contact.delete', $contact->id) }}">Delete</a>
+                <a class="btn btn-primary" href="{{ route('contact.edit' , $contact->id) }}">Edit</a>
+            </div>
         </td>
         </tr>
     </tbody>

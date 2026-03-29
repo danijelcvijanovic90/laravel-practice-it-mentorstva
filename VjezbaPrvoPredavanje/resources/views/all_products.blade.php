@@ -17,7 +17,7 @@
         <th>Created At</th>
         </tr>
     </thead>
-    
+
     <tbody>
         @foreach($products as $product)
         <tr>
@@ -28,8 +28,8 @@
             <td>{{ $product->image }}</td>
             <td>{{ $product->created_at }}</td>
             <td class="text-end">
-                <a class='btn btn-danger'href="{{ route('delete_product', $product->id) }}">Delete</a>
-                <a class='btn btn-primary'href="{{ route('edit_product', $product->id) }}">Edit</a>
+                <a class='btn btn-danger'href="{{ route('product.delete', $product->id) }}">Delete</a>
+                <a class='btn btn-primary'href="{{ route('product.edit', $product->id) }}">Edit</a>
             </td>
         </tr>
         @endforeach

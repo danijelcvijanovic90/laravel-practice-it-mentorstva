@@ -24,33 +24,50 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-
-Route::get('/', [HomepageController::class,'index']);
-
 Route::view("/about", "about");
+Route::get('/', [HomepageController::class,'index']);
+Route::get("/shop",[ShopController::class, 'index']);
 
-Route::get("/contact",[ContactController::class, 'index']);
 
-Route::get("/shop", [ShopController::class, 'index']);
 
-Route::get("/admin/all-contacts", [ContactController::class, 'get_all_contacts'])->name('all_contacts');
+Route::middleware(['auth', \App\Http\Middleware\AdminCheckMiddleware::class])->prefix('admin')->group(function()
+{
+    Route::controller(ContactController::class)->prefix('contact')->as('contact.')->group(function() {
+        Route::get('all', 'get_all_contacts')->name('all');
+        Route::get("delete/{contact}", 'delete')->name('delete');
+        Route::post("update/{contact}", 'update_contact')->name('update');
+        Route::get("edit/{contact}", 'edit_contact')->name('edit');
+    });
 
-Route::post("/send-contact", [ContactController::class,'send_contact']);
+    Route::controller(ShopController::class)->prefix('product')->as('product.')->group(function()
+    {
+        Route::view("add", 'add_product')->name('add');
+        Route::post("add-new-product",  'add_new_product')->name('add.new');
+    });
 
-Route::view("/admin/add-product", [ShopController::class,'add_product']);
+    Route::controller(ProductsController::class)->prefix('product')->as('product.')->group(function()
+    {
+        Route::get('all',  'index')->name('all');
+        Route::get("delete/{product}",  'delete')->name('delete');
+        Route::get("edit/{product}",  'single_product')->name('edit');
+        Route::post("update/{product}",  'update_product')->name('update');
+    });
+});
 
-Route::post("/add-new-product", [ShopController::class, 'add_new_product']);
 
-Route::get('/admin/all-products', [ProductsController::class, 'index'])->name('all_products');
+Route::controller(ContactController::class)->prefix('contact')->as('contact.')->group(function()
+{
+    Route::get("", 'index');
+    Route::post("send", 'send_contact')->name('send');
+});
 
-Route::get("/admin/delete-product/{product}", [ProductsController::class, 'delete'])->name('delete_product');
 
-Route::get("/admin/delete-contact/{contact}", [ContactController::class, 'delete'])->name('delete_contact');
 
-Route::get("/admin/edit-product/{product}", [ProductsController::class, 'single_product'])->name('edit_product');
 
-Route::post("/admin/update-product/{product}", [ProductsController::class, 'update_product'])->name('update_product');
 
-Route::get("/admin/edit-contact/{contact}", [ContactController::class, 'edit_contact'])->name('edit_contact');
 
-Route::post("/admin/update-contact/{contact}", [ContactController::class, 'update_contact'])->name('update_contact');
+
+
+
+
+

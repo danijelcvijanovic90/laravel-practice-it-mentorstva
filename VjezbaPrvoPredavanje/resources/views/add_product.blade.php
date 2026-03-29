@@ -11,8 +11,8 @@
 <div class="container d-flex col-md-4 justify-content-center mt-5">
     <h3>Add product</h3>
     </div>
-    <form class="container col-md-4 d-flex flex-column mt-3 py-3 gap-3" method='POST' action='/add-new-product'>
-        
+    <form class="container col-md-4 d-flex flex-column mt-3 py-3 gap-3" method='POST' action='{{ route('product.add.new') }}'>
+
         {{ csrf_field() }}
         <input type="text" name="name" class="form-control border border-dark" placeholder="Please enter product name" value="{{ old('name') }}">
         <input type="number" name="amount" class="form-control border border-dark" placeholder="Please enter amount" value="{{ old('amount') }}">

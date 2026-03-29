@@ -30,7 +30,7 @@ class ShopController extends Controller
     public function add_new_product(SaveProductRequest $request)
     {
         $this->productRepository->createNew($request);
-        return redirect("/admin/all-products");
+        return redirect()->route('product.all');
     }
 
 }

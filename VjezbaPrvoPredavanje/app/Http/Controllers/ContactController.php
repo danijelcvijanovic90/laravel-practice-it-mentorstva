@@ -68,6 +68,6 @@ class ContactController extends Controller
 
         $single_contact->update($request->validated());
 
-        return redirect(route('all_contacts'));
+        return redirect(route('contact.all'));
     }
 }

@@ -34,7 +34,7 @@ class ProductsController extends Controller
     public function update_product(UpdateProductRequest $request, ProductModel $product)
     {
         $product->update($request->validated());
-        return redirect()->route('all_products');
+        return redirect()->route('product.all');
     }
 
     public function delete($product)
