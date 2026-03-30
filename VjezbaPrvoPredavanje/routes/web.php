@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShopingCartController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ContactController;
@@ -26,7 +27,13 @@ require __DIR__.'/auth.php';
 
 Route::view("/about", "about");
 Route::get('/', [HomepageController::class,'index']);
-Route::get("/shop",[ShopController::class, 'index']);
+Route::get("shop",[ShopController::class,'index'])->name('shop');
+
+Route::get("/product/{product}", [ProductsController::class ,'permalink'])->name('products.permalink');
+
+Route::get('cart', [ShopingCartController::class, 'index'])->name('cart.index');
+Route::post('/cart/add',[ShopingCartController::class, 'addToCart'])->name('cart.add');
+
 
 
 

@@ -3,9 +3,7 @@
 @section('content')
 
 @if($errors->any())
-
 <p class="alert alert-danger text-center">Error: {{ $errors->first() }}</p>
-
 @endif
 
 <div class="container d-flex col-md-4 justify-content-center mt-5">

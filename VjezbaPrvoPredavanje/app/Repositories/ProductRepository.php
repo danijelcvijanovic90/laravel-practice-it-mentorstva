@@ -34,6 +34,4 @@ class ProductRepository
         // SELECT * FROM products WHERE id=:product LIMIT 1
         return $this->productModel::where(['id' => $product])->first();
     }
-
-
 }

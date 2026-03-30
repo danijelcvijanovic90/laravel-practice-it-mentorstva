@@ -5,10 +5,10 @@
     @section("tittle")
     Shop
     @endsection
-    
+
     @section("content")
-    
-    
+
+
 
     <div class="container py-3">
     <h5 class="mb-5 text-center">WELCOME TO SHOP</h5>
@@ -23,7 +23,7 @@
                     <p class="card-text">price: {{ $product->price }}$</p>
                     <p class="card-text">available: {{ $product->amount }} pcs</p>
                     <div class="mt-auto text-center">
-                        <button class="btn btn-success">Order Now</button>
+                        <a class=" btn btn-success" href="{{ route('products.permalink', $product->id) }}">See product</a>
                     </div>
                 </div>
             </div>
@@ -32,4 +32,4 @@
     </div>
     </div>
     @endsection
-    
+

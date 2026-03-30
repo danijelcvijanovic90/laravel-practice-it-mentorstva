@@ -32,5 +32,4 @@ class ShopController extends Controller
         $this->productRepository->createNew($request);
         return redirect()->route('product.all');
     }
-
 }

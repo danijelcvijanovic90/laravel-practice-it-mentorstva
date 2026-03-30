@@ -52,4 +52,10 @@ class ProductsController extends Controller
         return redirect()->back();
 
     }
+
+    public function permalink(ProductModel $product)
+    {
+
+        return view('permalink', compact('product'));
+    }
 }
